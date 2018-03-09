@@ -6,7 +6,7 @@ import io.reactivex.disposables.CompositeDisposable
 import me.dfournier.architecturecomponent.ErrorEvent
 import me.dfournier.architecturecomponent.Event
 import me.dfournier.architecturecomponent.SingleLiveEvent
-import me.dfournier.architecturecomponent.movie.presentation.domain.MovieService
+import me.dfournier.architecturecomponent.movie.domain.MovieService
 import javax.inject.Inject
 
 /**

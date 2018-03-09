@@ -6,18 +6,22 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import me.dfournier.architecturecomponent.di.annotation.ViewModelKey
 import me.dfournier.architecturecomponent.movie.presentation.detail.MovieDetailViewModel
-import me.dfournier.architecturecomponent.movie.presentation.list.MovieListViewModel
 
 /**
- * Created by dfournier on 01/03/18.
+ * @author dfournier
  */
 @Module
 abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(MovieListViewModel::class)
-    abstract fun bindListViewModel(viewModel: MovieListViewModel): ViewModel
+    @ViewModelKey(me.dfournier.architecturecomponent.movie.presentation.list.db.MovieListViewModel::class)
+    abstract fun bindListViewModelDb(viewModel: me.dfournier.architecturecomponent.movie.presentation.list.db.MovieListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(me.dfournier.architecturecomponent.movie.presentation.list.refresh.MovieListViewModel::class)
+    abstract fun bindListViewModelRefresh(viewModel: me.dfournier.architecturecomponent.movie.presentation.list.refresh.MovieListViewModel): ViewModel
 
     @Binds
     @IntoMap

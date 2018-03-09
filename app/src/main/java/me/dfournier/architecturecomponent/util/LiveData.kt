@@ -13,3 +13,9 @@ fun <T> LiveData<T>.observeSafe(lifeCycleOwner: LifecycleOwner, observer: (T) ->
         it?.let(observer)
     })
 }
+
+fun <T> LiveData<T>.observe(lifeCycleOwner: LifecycleOwner, observer: (T?) -> Unit) {
+    this.observe(lifeCycleOwner, Observer {
+        observer(it)
+    })
+}

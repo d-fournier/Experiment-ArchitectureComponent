@@ -1,4 +1,4 @@
-package me.dfournier.architecturecomponent.movie.presentation.domain
+package me.dfournier.architecturecomponent.movie.domain
 
 import io.reactivex.Observable
 import io.reactivex.Single

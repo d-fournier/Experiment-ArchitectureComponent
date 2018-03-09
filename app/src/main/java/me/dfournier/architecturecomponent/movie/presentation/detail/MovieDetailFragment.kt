@@ -8,14 +8,14 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_detail.*
 import me.dfournier.architecturecomponent.CustomViewModelFactory
 import me.dfournier.architecturecomponent.R
-import me.dfournier.architecturecomponent.base.BaseFragment
+import me.dfournier.architecturecomponent.base.presentation.fragment.BaseClassicFragment
 import me.dfournier.architecturecomponent.util.observeSafe
 import javax.inject.Inject
 
 /**
  * Created by dfournier on 18/02/18.
  */
-class MovieDetailFragment : BaseFragment() {
+class MovieDetailFragment : BaseClassicFragment() {
 
     @Inject
     lateinit var viewModelFactory: CustomViewModelFactory

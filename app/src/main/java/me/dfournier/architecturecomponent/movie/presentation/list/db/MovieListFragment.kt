@@ -1,4 +1,4 @@
-package me.dfournier.architecturecomponent.movie.presentation.list
+package me.dfournier.architecturecomponent.movie.presentation.list.db
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -11,16 +11,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import dagger.android.support.AndroidSupportInjection
 import me.dfournier.architecturecomponent.*
-import me.dfournier.architecturecomponent.base.BaseFragment
+import me.dfournier.architecturecomponent.base.presentation.fragment.BaseBindingFragment
+import me.dfournier.architecturecomponent.databinding.FragmentListDbBinding
 import me.dfournier.architecturecomponent.movie.list.MovieListAdapter
 import me.dfournier.architecturecomponent.movie.presentation.detail.MovieDetailFragment
-import me.dfournier.architecturecomponent.util.observeSafe
+import me.dfournier.architecturecomponent.util.observe
 import javax.inject.Inject
 
 /**
- * Created by dfournier on 16/02/18.
+ * @author dfournier
  */
-class MovieListFragment : BaseFragment() {
+class MovieListFragment : BaseBindingFragment<FragmentListDbBinding>() {
 
     @Inject
     lateinit var viewModelFactory: CustomViewModelFactory
@@ -31,22 +32,16 @@ class MovieListFragment : BaseFragment() {
     lateinit var list: RecyclerView
     lateinit var adapter: MovieListAdapter
 
-    override fun getLayoutId(): Int = R.layout.fragment_list
-
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
 
+    override fun getLayoutId(): Int = R.layout.fragment_list_db
+
     override fun bindView(view: View) {
         super.bindView(view)
-        refresh = view.findViewById(R.id.refresh)
-        refresh.setOnRefreshListener {
-            viewModel.refreshMovieList()
-        }
-        adapter = MovieListAdapter {
-            viewModel.onMovieSelected(it)
-        }
+        adapter = MovieListAdapter()
         list = view.findViewById(R.id.list_item)
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter
@@ -55,9 +50,10 @@ class MovieListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieListViewModel::class.java)
-        viewModel.state.observeSafe(this) {
-            refresh.isRefreshing = it.loading
-            adapter.list = it.movieList
+
+        binding.setVariable(BR.state, viewModel.state)
+        viewModel.state.movieList.observe(this) {
+            adapter.replace(it)
         }
 
         viewModel.event.observe(this, Observer {
@@ -87,6 +83,4 @@ class MovieListFragment : BaseFragment() {
             return MovieListFragment()
         }
     }
-
 }
-

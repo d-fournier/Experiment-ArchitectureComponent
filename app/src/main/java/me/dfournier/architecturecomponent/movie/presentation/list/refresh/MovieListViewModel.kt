@@ -1,10 +1,11 @@
-package me.dfournier.architecturecomponent.movie.presentation.list
+package me.dfournier.architecturecomponent.movie.presentation.list.refresh
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import me.dfournier.architecturecomponent.*
-import me.dfournier.architecturecomponent.movie.presentation.domain.MovieService
+import me.dfournier.architecturecomponent.movie.domain.MovieService
+import me.dfournier.architecturecomponent.movie.presentation.common.MovieItemDB
 import javax.inject.Inject
 
 /**
@@ -15,10 +16,12 @@ class MovieListViewModel
         private val movieService: MovieService
 ) : ViewModel() {
 
-    val state = MutableLiveData<MovieListState>()
     val event = SingleLiveEvent<Event>()
 
+    val state = MutableLiveData<MovieListState>()
     private var internalState = MovieListState(emptyList(), false)
+
+
     private val disposableList = CompositeDisposable()
 
     init {
@@ -32,7 +35,13 @@ class MovieListViewModel
         val disposable = movieService.getMovieList()
                 .subscribe(
                         {
-                            internalState = internalState.copy(movieList = it)
+                            val list = it.map {
+                                MovieItemDB(it.id, it.title, this::onMovieSelected)
+                            }
+
+                            internalState = internalState.copy(
+                                    movieList = list
+                            )
                             state.postValue(internalState)
                         },
                         {
@@ -48,7 +57,7 @@ class MovieListViewModel
         disposableList.add(disposable)
     }
 
-    fun onMovieSelected(id: Long) {
+    private fun onMovieSelected(id: Long) {
         event.postValue(NavigationEvent(
                 NAV_DETAIL_VIEW, id
         ))

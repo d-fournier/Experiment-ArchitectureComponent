@@ -1,31 +1,14 @@
 package me.dfournier.architecturecomponent.movie.list
 
-import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import me.dfournier.architecturecomponent.R
-import me.dfournier.architecturecomponent.model.Movie
+import me.dfournier.architecturecomponent.base.presentation.adapter.ViewBindingRecyclerViewAdapter
+import me.dfournier.architecturecomponent.movie.presentation.common.MovieItemDB
 
 /**
- * Created by dfournier on 16/02/18.
+ * @author dfournier
  */
-class MovieListAdapter(val listener: (Long) -> Any) : RecyclerView.Adapter<MovieViewHolder>() {
+class MovieListAdapter : ViewBindingRecyclerViewAdapter<MovieItemDB>() {
 
-    var list: List<Movie> = ArrayList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+    override fun getLayoutIdForPosition(position: Int): Int = R.layout.item_movie
 
-    override fun getItemCount(): Int = list.size
-
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bind(list[position])
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_movie, parent, false)
-        return MovieViewHolder(view, listener)
-    }
 }
